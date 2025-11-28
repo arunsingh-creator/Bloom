@@ -1,0 +1,19 @@
+# Core API dependencies
+# Web Framework
+fastapi
+uvicorn
+
+# AI/ML Libraries
+groq
+
+# Data Validation
+pydantic==2.10.3
+
+# Utilities
+python-multipart==0.0.6
+python-dotenv==1.0.0
+
+# Scientific Computing & ML (CPU-optimized for deployment)
+--extra-index-url https://download.pytorch.org/whl/cpu
+numpy
+torch
