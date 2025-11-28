@@ -8,7 +8,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from app.routers import chatbot_router, prediction_router, pcos_router, thyroid_router
+from app.routers import chatbot_router, prediction_router, pcos_router, thyroid_router, nutrition_router
 from app.config import GROQ_API_KEY, MODEL_NAME
 from app.ml.model_factory import get_framework_availability
 from app.utils.logging import logger, log_info
@@ -44,6 +44,7 @@ app.include_router(chatbot_router)
 app.include_router(prediction_router)
 app.include_router(pcos_router)
 app.include_router(thyroid_router)
+app.include_router(nutrition_router)
 
 
 @app.get("/")
@@ -59,7 +60,8 @@ async def root():
             "chatbot": "Available at /chat",
             "cycle_prediction": "Available at /predict",
             "pcos_risk": "Available at /pcos/risk-assessment",
-            "thyroid_tracker": "Available at /thyroid"
+            "thyroid_tracker": "Available at /thyroid",
+            "nutrition": "Available at /nutrition"
         },
         "docs": "/docs",
         "health": "/health"
@@ -126,6 +128,7 @@ if __name__ == "__main__":
     print("  📊 Cycle Prediction: POST /predict")
     print("  ⚠️  PCOS Risk: POST /pcos/risk-assessment")
     print("  🦋 Thyroid Tracker: POST /thyroid/risk-assessment")
+    print("  🥗 Nutrition: POST /nutrition/calculate")
     print("  ❤️  Health Check: GET /health")
     print("=" * 70)
     

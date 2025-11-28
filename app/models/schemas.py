@@ -292,3 +292,68 @@ class ThyroidRiskResponse(BaseModel):
     recommendation: str = Field(..., description="Health recommendation")
     matched_symptoms: List[str] = Field(..., description="List of symptoms that contributed to the risk")
 
+
+# ============================================================================
+# Nutrition Section Models
+# ============================================================================
+
+from enum import Enum
+
+class NutritionGoal(str, Enum):
+    WEIGHT_LOSS = "weight_loss"
+    WEIGHT_GAIN = "weight_gain"
+    MAINTAIN = "maintain"
+
+class ActivityLevel(str, Enum):
+    SEDENTARY = "sedentary"
+    LIGHT = "light"
+    MODERATE = "moderate"
+    ACTIVE = "active"
+    VERY_ACTIVE = "very_active"
+
+class NutritionProfileRequest(BaseModel):
+    """Request model for calculating daily nutrition needs."""
+    age: int = Field(..., ge=10, le=100, description="Age in years")
+    height: float = Field(..., ge=100, le=250, description="Height in cm")
+    weight: float = Field(..., ge=30, le=200, description="Weight in kg")
+    activity_level: ActivityLevel = Field(..., description="Activity level")
+    goal: NutritionGoal = Field(..., description="Health goal")
+
+class NutritionPlanResponse(BaseModel):
+    """Response model for daily nutrition plan."""
+    calories: int = Field(..., description="Daily calorie requirement")
+    protein: int = Field(..., description="Protein in grams")
+    carbs: int = Field(..., description="Carbohydrates in grams")
+    fats: int = Field(..., description="Fats in grams")
+    water_intake: float = Field(..., description="Recommended water intake in liters")
+    bmi: float = Field(..., description="Body Mass Index")
+    bmi_category: str = Field(..., description="BMI Category (Underweight, Normal, Overweight, Obese)")
+
+class CyclePhase(str, Enum):
+    MENSTRUAL = "menstrual"
+    FOLLICULAR = "follicular"
+    OVULATION = "ovulation"
+    LUTEAL = "luteal"
+
+class DailyNutritionTip(BaseModel):
+    """Daily nutrition tip based on cycle phase."""
+    phase: CyclePhase = Field(..., description="Current menstrual phase")
+    focus: str = Field(..., description="Main nutritional focus (e.g., Iron + Hydration)")
+    foods_to_eat: List[str] = Field(..., description="Recommended foods")
+    foods_to_avoid: List[str] = Field(..., description="Foods to limit or avoid")
+    tip_of_the_day: str = Field(..., description="Actionable tip")
+
+class NutrientInfo(BaseModel):
+    """Information about a specific nutrient."""
+    name: str = Field(..., description="Nutrient name (e.g., Iron)")
+    importance: str = Field(..., description="Why it is important")
+    food_sources: List[str] = Field(..., description="Rich food sources")
+
+class NutritionAlert(BaseModel):
+    """Health alert based on symptoms."""
+    alert_type: str = Field(..., description="Type of alert (e.g., Iron Deficiency)")
+    severity: str = Field(..., description="Severity: Low, Medium, High")
+    message: str = Field(..., description="Alert message")
+    recommendation: str = Field(..., description="What to do")
+
+
