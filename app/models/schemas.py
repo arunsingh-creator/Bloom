@@ -200,3 +200,94 @@ class PCOSRiskResponse(BaseModel):
     risk_level: str = Field(..., description="Risk level: Low, Moderate, High")
     recommendation: str = Field(..., description="Health recommendation based on risk")
 
+
+# ============================================================================
+# Thyroid Tracker Models
+# ============================================================================
+
+class ThyroidSymptomLog(BaseModel):
+    """Daily log for thyroid-related symptoms."""
+    date: str = Field(..., description="Date of the log (YYYY-MM-DD)")
+    
+    # 1. Cycle & Reproductive (Optional override if tracking separately)
+    cycle_day: Optional[int] = Field(None, description="Day of the menstrual cycle")
+    
+    # 2. Energy & Fatigue
+    energy_level: Optional[int] = Field(None, ge=1, le=10, description="Energy rating (1-10)")
+    fatigue_intensity: Optional[int] = Field(None, ge=0, le=5, description="Fatigue intensity (0=none, 5=severe)")
+    feeling_sluggish: Optional[bool] = Field(None, description="Feeling sleepy or sluggish")
+    hyperactivity: Optional[bool] = Field(None, description="Sudden bursts of high activity")
+    
+    # 3. Weight & Body
+    weight_change_observation: Optional[str] = Field(None, description="Observed weight change: 'gain', 'loss', 'stable'")
+    swelling: Optional[bool] = Field(None, description="Swelling/puffiness in face or hands")
+    
+    # 4. Mood
+    mood_swings: Optional[bool] = Field(None, description="Experiencing mood swings")
+    anxiety: Optional[bool] = Field(None, description="Feeling anxious")
+    depression: Optional[bool] = Field(None, description="Feeling depressed")
+    irritability: Optional[bool] = Field(None, description="Feeling irritable")
+    brain_fog: Optional[bool] = Field(None, description="Difficulty concentrating")
+    
+    # 5. Temperature
+    body_temperature: Optional[float] = Field(None, description="Basal Body Temperature (BBT)")
+    cold_sensitivity: Optional[bool] = Field(None, description="Feeling too cold")
+    heat_sensitivity: Optional[bool] = Field(None, description="Feeling too hot")
+    
+    # 6. Heart & Sleep
+    resting_heart_rate: Optional[int] = Field(None, description="Resting heart rate (BPM)")
+    palpitations: Optional[bool] = Field(None, description="Heart palpitations")
+    sleep_issues: Optional[str] = Field(None, description="Sleep issues: 'insomnia', 'oversleeping', 'disturbed', 'none'")
+    
+    # 7. Skin & Hair
+    hair_loss: Optional[bool] = Field(None, description="Noticeable hair fall")
+    dry_skin: Optional[bool] = Field(None, description="Dry or rough skin")
+    brittle_nails: Optional[bool] = Field(None, description="Brittle nails")
+    
+    # 8. Stress
+    stress_level: Optional[int] = Field(None, ge=1, le=10, description="Daily stress score (1-10)")
+
+    @field_validator('date')
+    @classmethod
+    def validate_date(cls, v):
+        try:
+            datetime.strptime(v, "%Y-%m-%d")
+        except ValueError:
+            raise ValueError('Date must be in YYYY-MM-DD format')
+        return v
+
+
+class ThyroidRiskRequest(BaseModel):
+    """Request model for Thyroid risk assessment."""
+    # Weight & Energy
+    unexplained_weight_gain: bool = Field(False, description="Unexplained weight gain")
+    unexplained_weight_loss: bool = Field(False, description="Unexplained weight loss")
+    constant_fatigue: bool = Field(False, description="Constant fatigue or low energy")
+    
+    # Temperature
+    cold_intolerance: bool = Field(False, description="Feeling cold when others are not")
+    heat_intolerance: bool = Field(False, description="Feeling hot/sweating when others are not")
+    
+    # Physical
+    hair_loss: bool = Field(False, description="Excessive hair loss")
+    dry_skin: bool = Field(False, description="Dry, itchy skin")
+    neck_swelling: bool = Field(False, description="Swelling in the neck (goiter)")
+    palpitations: bool = Field(False, description="Fast or irregular heartbeat")
+    tremors: bool = Field(False, description="Shaking hands or tremors")
+    
+    # Mental & Cycle
+    mood_changes: bool = Field(False, description="Anxiety, depression, or irritability")
+    irregular_periods: bool = Field(False, description="Irregular or missed periods")
+    
+    # Family History
+    family_history: bool = Field(False, description="Family history of thyroid problems")
+
+
+class ThyroidRiskResponse(BaseModel):
+    """Response model for Thyroid risk assessment."""
+    risk_score: int = Field(..., description="Calculated risk score (0-100)")
+    risk_level: str = Field(..., description="Risk level: Low, Moderate, High")
+    condition_leaning: str = Field(..., description="Leaning towards: 'Hypothyroid', 'Hyperthyroid', or 'Unclear'")
+    recommendation: str = Field(..., description="Health recommendation")
+    matched_symptoms: List[str] = Field(..., description="List of symptoms that contributed to the risk")
+
