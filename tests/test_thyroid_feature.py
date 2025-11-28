@@ -19,7 +19,8 @@ def test_risk_assessment():
         constant_fatigue=True,
         cold_intolerance=True,
         dry_skin=True,
-        hair_loss=True
+        hair_loss=True,
+        mood_changes=True
     )
     res1 = calculate_thyroid_risk(req1)
     print(f"Score: {res1.risk_score}")

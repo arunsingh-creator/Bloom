@@ -48,8 +48,7 @@ def calculate_thyroid_risk(data: ThyroidRiskRequest) -> ThyroidRiskResponse:
         hypo_score += 5 # Overlap
         hyper_score += 5
         matched_symptoms.append("Hair loss")
-    if data.depression: # mapped from mood_changes if possible, but using general mood here
-        pass 
+ 
 
     # Hyperthyroid Indicators
     if data.unexplained_weight_loss:

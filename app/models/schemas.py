@@ -221,6 +221,7 @@ class ThyroidSymptomLog(BaseModel):
     # 3. Weight & Body
     weight_change_observation: Optional[str] = Field(None, description="Observed weight change: 'gain', 'loss', 'stable'")
     swelling: Optional[bool] = Field(None, description="Swelling/puffiness in face or hands")
+    neck_swelling: Optional[bool] = Field(None, description="Swelling in the neck (goiter)")
     
     # 4. Mood
     mood_swings: Optional[bool] = Field(None, description="Experiencing mood swings")
